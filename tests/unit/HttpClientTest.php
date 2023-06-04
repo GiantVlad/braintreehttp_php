@@ -16,7 +16,7 @@ class HttpClientTest extends TestCase
     private $wireMock;
     private $environment;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->wireMock = WireMock::create();
         $this->environment = new DevelopmentEnvironment("http://localhost:8080");
@@ -24,12 +24,12 @@ class HttpClientTest extends TestCase
         $this->assertTrue($this->wireMock->isAlive());
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         exec('java -jar ./tests/wiremock-standalone.jar --port 8080 --https-port 8443 > /dev/null 2>&1 &');
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         exec('ps aux | grep wiremock | grep -v grep | awk \'{print $2}\' | xargs kill -9');
     }
@@ -54,7 +54,10 @@ class HttpClientTest extends TestCase
         $inj2 = new BasicInjector();
         $client->addInjector($inj2);
 
-        $this->assertArraySubset([$inj1, $inj2], $client->injectors);
+        $this->assertIsArray($client->injectors);
+        $this->assertCount(2, $client->injectors);
+        $this->assertEquals($inj1, $client->injectors[0]);
+        $this->assertEquals($inj2, $client->injectors[1]);
     }
 
     public function testExecute_usesInjectorsToModifyRequest()
@@ -144,6 +147,7 @@ class HttpClientTest extends TestCase
         $this->wireMock->stubFor(WireMock::post(WireMock::urlEqualTo("/path"))
             ->willReturn(WireMock::aResponse()
             ->withHeader("Some-key", "Some value")
+            ->withHeader("lowercase-key", "lowercase value")
             ->withHeader("Content-Type", "text/plain")
             ->withBody("some plain text")
             ->withStatus(200)));
@@ -154,6 +158,7 @@ class HttpClientTest extends TestCase
         $response = $client->execute($req);
 
         $this->assertEquals("Some value", $response->headers["Some-key"]);
+        $this->assertEquals("lowercase value", $response->headers["Lowercase-key"]);
         $this->assertEquals("text/plain", $response->headers["Content-Type"]);
         $this->assertEquals("some plain text", $response->result);
     }
@@ -175,8 +180,8 @@ class HttpClientTest extends TestCase
             $this->fail("expected execute to throw");
         } catch (HttpException $e) {
             $this->assertEquals(400, $e->statusCode);
-            $this->assertArraySubset(["Debug-Id" => "some debug id"], $e->headers);
-            $this->assertArraySubset(["Content-Type" => "text/plain"], $e->headers);
+            $this->assertEquals("some debug id", $e->headers["Debug-Id"]);
+            $this->assertEquals("text/plain", $e->headers["Content-Type"]);
             $this->assertEquals("Response body", $e->getMessage());
         }
     }

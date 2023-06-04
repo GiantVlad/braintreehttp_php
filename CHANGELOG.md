@@ -1,3 +1,7 @@
+## 0.4.0
+- Update dependencies, min version of PHP is 7.3
+- Fix. Support lowercase headers
+
 ## 0.3.0
 - Add support for multipart/form-data with JSON parts
 

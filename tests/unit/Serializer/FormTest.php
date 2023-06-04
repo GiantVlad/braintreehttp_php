@@ -14,6 +14,7 @@ class FormTest extends TestCase
      */
     public function testFormThrowsWhenRequestBodyNotArray()
     {
+        $this->expectException(\Exception::class);
         $multipart = new Form();
 
         $request = new HttpRequest("/", "POST");
@@ -29,6 +30,7 @@ class FormTest extends TestCase
      */
     public function testFormThrowsWhenRequestBodyNotAssociativeArray()
     {
+        $this->expectException(\Exception::class);
         $multipart = new Form();
 
         $body = [];

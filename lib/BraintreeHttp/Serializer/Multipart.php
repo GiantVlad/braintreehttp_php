@@ -54,7 +54,7 @@ class Multipart implements Serializer
 
         $body = array_merge($value_params, $file_params);
 
-        // add boundary for each parameters
+        // add boundary for each parameter
         array_walk($body, function (&$part) use ($boundary) {
             $part = "--{$boundary}" . self::LINEFEED . "{$part}";
         });

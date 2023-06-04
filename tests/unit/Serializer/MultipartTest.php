@@ -16,6 +16,7 @@ class MultipartTest extends TestCase
      */
     public function testMultipartThrowsWhenRequestBodyNotArray()
     {
+        $this->expectException(\Exception::class);
         $multipart = new Multipart();
 
         $request = new HttpRequest("/", "POST");
@@ -31,6 +32,7 @@ class MultipartTest extends TestCase
      */
     public function testMultipartThrowsWhenRequestBodyNotAssociativeArray()
     {
+        $this->expectException(\Exception::class);
         $multipart = new Multipart();
 
         $body = [];
@@ -56,8 +58,8 @@ class MultipartTest extends TestCase
         $request->headers["Content-Type"] = "multipart/form-data";
 
         $encodedBody = $multipart->encode($request);
-        $this->assertContains("boundary=", $request->headers["Content-Type"]);
-        $this->assertContains("Content-Disposition: form-data; name=\"key1\"\r\n\r\nvalue1\r\n", $encodedBody);
+        $this->assertStringContainsString("boundary=", $request->headers["Content-Type"]);
+        $this->assertStringContainsString("Content-Disposition: form-data; name=\"key1\"\r\n\r\nvalue1\r\n", $encodedBody);
     }
 
     public function testMultipartMultipleKeys()
@@ -73,9 +75,9 @@ class MultipartTest extends TestCase
         $request->headers["Content-Type"] = "multipart/form-data";
 
         $encodedBody = $multipart->encode($request);
-        $this->assertContains("boundary=", $request->headers["Content-Type"]);
-        $this->assertContains("Content-Disposition: form-data; name=\"key1\"\r\n\r\nvalue1\r\n", $encodedBody);
-        $this->assertContains("Content-Disposition: form-data; name=\"key2\"\r\n\r\nvalue2\r\n", $encodedBody);
+        $this->assertStringContainsString("boundary=", $request->headers["Content-Type"]);
+        $this->assertStringContainsString("Content-Disposition: form-data; name=\"key1\"\r\n\r\nvalue1\r\n", $encodedBody);
+        $this->assertStringContainsString("Content-Disposition: form-data; name=\"key2\"\r\n\r\nvalue2\r\n", $encodedBody);
     }
 
     public function testMultipartJSONPart()
@@ -91,8 +93,8 @@ class MultipartTest extends TestCase
         $request->headers["Content-Type"] = "multipart/form-data";
 
         $encodedBody = $multipart->encode($request);
-        $this->assertContains("boundary=", $request->headers["Content-Type"]);
-        $this->assertContains("Content-Disposition: form-data; name=\"key1\"; filename=\"key1.json\"\r\nContent-Type: application/json\r\n\r\n{\"json_key\":\"json_value\"}\r\n", $encodedBody);
+        $this->assertStringContainsString("boundary=", $request->headers["Content-Type"]);
+        $this->assertStringContainsString("Content-Disposition: form-data; name=\"key1\"; filename=\"key1.json\"\r\nContent-Type: application/json\r\n\r\n{\"json_key\":\"json_value\"}\r\n", $encodedBody);
     }
 
     public function testMultipartFile()
@@ -108,7 +110,7 @@ class MultipartTest extends TestCase
         $request->headers["Content-Type"] = "multipart/form-data";
 
         $encodedBody = $multipart->encode($request);
-        $this->assertContains("boundary=", $request->headers["Content-Type"]);
-        $this->assertContains("Content-Disposition: form-data; name=\"file1\"; filename=\"sample.txt\"\r\nContent-Type: text/plain\r\n\r\nHello World!\n\r\n", $encodedBody);
+        $this->assertStringContainsString("boundary=", $request->headers["Content-Type"]);
+        $this->assertStringContainsString("Content-Disposition: form-data; name=\"file1\"; filename=\"sample.txt\"\r\nContent-Type: text/plain\r\n\r\nHello World!\n\r\n", $encodedBody);
     }
 }

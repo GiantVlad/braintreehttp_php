@@ -15,6 +15,7 @@ class EncoderTest extends TestCase
      */
     public function testEncode_throwsExceptionIfContentTypeNotPresent()
     {
+        $this->expectException(\Exception::class);
         $encoder = new Encoder();
         $httpRequest = new HttpRequest("/path", "post");
         $httpRequest->body = "some string";
@@ -28,6 +29,7 @@ class EncoderTest extends TestCase
      */
     public function testEncode_throwsExceptionIfNoSerializerForGivenContentType()
     {
+        $this->expectException(\Exception::class);
         $encoder = new Encoder();
         $httpRequest = new HttpRequest("/path", "post");
         $httpRequest->headers['Content-Type'] = "non-existent/type";
@@ -42,6 +44,7 @@ class EncoderTest extends TestCase
      */
     public function testEncode_throwsExceptionForNonStringOrArrayBody()
     {
+        $this->expectException(\Exception::class);
         $encoder = new Encoder();
         $httpRequest = new HttpRequest("/path", "post");
 
@@ -91,6 +94,7 @@ class EncoderTest extends TestCase
      */
     public function testDecode_throwsWhenContentTypeNotPresent()
     {
+        $this->expectException(\Exception::class);
         $encoder = new Encoder();
         $headers = [];
 
@@ -103,6 +107,7 @@ class EncoderTest extends TestCase
      */
     public function testDecode_throwsWhenNoSerializerAvailableForContentType()
     {
+        $this->expectException(\Exception::class);
         $encoder = new Encoder();
         $headers = [
             "Content-Type" => "application/unstructured"
