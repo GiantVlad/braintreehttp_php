@@ -194,7 +194,7 @@ class HttpClient
             }
 
             list($k, $v) = explode(":", $header);
-            $key = trim($k);
+            $key = ucfirst(trim($k));
             $value = trim($v);
         }
     }
