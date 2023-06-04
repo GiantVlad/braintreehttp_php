@@ -157,8 +157,8 @@ class HttpClientTest extends TestCase
         $req = new HttpRequest("/path", "POST");
         $response = $client->execute($req);
 
-        $this->assertEquals("Some value", $response->headers["Some-key"]);
-        $this->assertEquals("lowercase value", $response->headers["Lowercase-key"]);
+        $this->assertEquals("Some value", $response->headers["Some-Key"]);
+        $this->assertEquals("lowercase value", $response->headers["Lowercase-Key"]);
         $this->assertEquals("text/plain", $response->headers["Content-Type"]);
         $this->assertEquals("some plain text", $response->result);
     }
