@@ -1,12 +1,16 @@
 {
-    "name": "braintree/braintreehttp",
+    "name": "giantvlad/braintreehttp",
     "type": "library",
-    "description": "The PHP Http client.",
+    "description": "The PHP Http client. The fork of braintree/braintreehttp",
     "license": "MIT",
     "authors": [
         {
             "name": "Braintree",
             "email": "code@getbraintree.com"
+        },
+        {
+            "name": "GiantVlad",
+            "email": "hofirma@gmail.com"
         }
     ],
     "require": {
